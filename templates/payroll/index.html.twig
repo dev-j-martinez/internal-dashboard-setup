@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Payroll | Intranet{% endblock %}
+{% block header_title %}My Payroll & Personal Data{% endblock %}
+
+{% block body %}
+    <div class="mb-8 max-w-2xl">
+        <h3 class="text-2xl font-bold text-gray-800 tracking-tight mb-2">Financial Overview</h3>
+        <p class="text-gray-500">View your highly sensitive personal and financial information securely.</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <!-- Personal Sensitive Data Card -->
+        <div class="bg-white rounded-xl shadow-sm border border-red-100 p-6 relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-4">
+                <span class="bg-red-100 text-red-800 text-xs font-bold px-2 py-1 rounded-full uppercase tracking-wider">Confidential</span>
+            </div>
+            <h4 class="text-lg font-bold text-gray-900 mb-4 border-b pb-2">Personal Information</h4>
+            <div class="space-y-4 text-sm">
+                <div>
+                    <span class="block text-gray-500 font-semibold mb-1">Full Name</span>
+                    <span class="block text-gray-900 font-medium text-base">{{ user.name }}</span>
+                </div>
+                <div>
+                    <span class="block text-gray-500 font-semibold mb-1">Social Security Number</span>
+                    <span class="block text-gray-900 font-mono bg-gray-50 px-2 py-1 rounded inline-block border border-gray-200">{{ user.socialSecurityNumber }}</span>
+                </div>
+                <div>
+                    <span class="block text-gray-500 font-semibold mb-1">Home Address</span>
+                    <span class="block text-gray-900">{{ user.address }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Financial Data Card -->
+        <div class="bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl shadow-lg border border-gray-700 p-6 text-white relative overflow-hidden">
+            <svg class="absolute -bottom-4 -right-4 w-32 h-32 text-gray-600 opacity-20" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"></path><path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"></path></svg>
+            <h4 class="text-lg font-bold text-gray-100 mb-4 border-b border-gray-600 pb-2 relative z-10">Banking Details</h4>
+            <div class="space-y-4 text-sm relative z-10">
+                <div>
+                    <span class="block text-gray-400 font-semibold mb-1">Annual Salary</span>
+                    <span class="block text-2xl font-bold text-green-400">${{ user.salary|number_format(2, '.', ',') }}</span>
+                </div>
+                <div>
+                    <span class="block text-gray-400 font-semibold mb-1">Direct Deposit Account (IBAN)</span>
+                    <span class="block font-mono text-gray-200 tracking-wider bg-gray-800/50 px-2 py-1 rounded border border-gray-600 inline-block">{{ user.bankAccountNumber }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payslips Table -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
+            <h4 class="text-lg font-bold text-gray-900">Recent Payslips</h4>
+            <button class="text-sm font-semibold text-blue-600 hover:text-blue-800">Download All PDF</button>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left">
+                <thead class="text-xs text-gray-500 uppercase bg-gray-50 border-b border-gray-200">
+                    <tr>
+                        <th class="px-6 py-3 font-semibold">Pay Period</th>
+                        <th class="px-6 py-3 font-semibold">Net Amount</th>
+                        <th class="px-6 py-3 font-semibold">Status</th>
+                        <th class="px-6 py-3 font-semibold text-right">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    {% for slip in payslips %}
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-6 py-4 font-medium text-gray-900">{{ slip.paymentDate|date('F Y') }}</td>
+                        <td class="px-6 py-4 text-gray-700">${{ slip.netAmount }}</td>
+                        <td class="px-6 py-4">
+                            <span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">{{ slip.status }}</span>
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <a href="#" class="font-medium text-blue-600 hover:text-blue-800 flex items-center justify-end gap-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                PDF
+                            </a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="4" class="px-6 py-8 text-center text-gray-500">
+                            No payroll records found yet.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Intranet{% endblock %}</title>
+    
+    {# 
+        Using CDN for Tailwind for immediate aesthetic rendering while the local build compiles,
+        but typically we would use the compiled CSS. We can include both or just CDN for rapid prototyping.
+    #}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased flex h-screen overflow-hidden">
+
+    {% if app.user %}
+        <!-- Sidebar -->
+        <aside class="w-64 bg-gray-900 text-white flex flex-col transition-all duration-300">
+            <div class="h-16 flex items-center justify-center border-b border-gray-800">
+                <h1 class="text-xl font-bold tracking-wider pt-1">🏢 INTRANET</h1>
+            </div>
+            
+            <nav class="flex-1 px-4 py-6 space-y-2">
+                <a href="{{ path('app_dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors {% if app.request.attributes.get('_route') == 'app_dashboard' %}bg-blue-600 hover:bg-blue-600{% endif %}">
+                    <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                    <span class="font-medium">Dashboard</span>
+                </a>
+                <a href="{{ path('app_directory') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors {% if app.request.attributes.get('_route') == 'app_directory' %}bg-blue-600 hover:bg-blue-600{% endif %}">
+                    <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354A4 4 0 1115 21H3v-1a6 6 0 0112 0v1zm0 0V4m0 0v.354m0 0A4 4 0 1112 4zm0 0v.354m0 0A4 4 0 1112 4z" stroke="none"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    <span class="font-medium">Directory</span>
+                </a>
+                <a href="{{ path('app_payroll') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors {% if app.request.attributes.get('_route') == 'app_payroll' %}bg-blue-600 hover:bg-blue-600{% endif %}">
+                    <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span class="font-medium">My Payroll</span>
+                </a>
+            </nav>
+
+            <div class="p-4 border-t border-gray-800">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="h-10 w-10 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold text-lg">
+                        {{ app.user.name|slice(0, 1) }}
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold truncate">{{ app.user.name }}</p>
+                        <p class="text-xs text-gray-400 truncate">{{ app.user.jobTitle }}</p>
+                    </div>
+                </div>
+                <a href="{{ path('app_logout') }}" class="block w-full text-center py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-800 rounded transition-colors">
+                    Log out
+                </a>
+            </div>
+        </aside>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col relative overflow-hidden bg-gray-50">
+        <!-- Top bar (optional) -->
+        {% if app.user %}
+        <header class="h-16 flex items-center justify-between px-8 bg-white border-b border-gray-200">
+            <h2 class="text-xl font-semibold text-gray-800">{% block header_title %}Overview{% endblock %}</h2>
+            <div class="flex items-center gap-4">
+                {% if is_granted('ROLE_ADMIN') %}
+                <form action="{{ path('app_admin_payroll_execute') }}" method="POST" class="inline">
+                    <button type="submit" class="text-sm font-bold bg-green-100 text-green-800 px-4 py-2 rounded-full hover:bg-green-200 transition-colors shadow-sm">
+                        💰 Execute Monthly Payroll
+                    </button>
+                </form>
+                <a href="{{ path('app_announcement_new') }}" class="text-sm font-medium bg-blue-100 text-blue-700 px-4 py-2 rounded-full hover:bg-blue-200 transition-colors shadow-sm">
+                    + New Announcement
+                </a>
+                {% endif %}
+            </div>
+        </header>
+        {% endif %}
+
+        <div class="flex-1 overflow-auto p-8">
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="mb-6 p-4 rounded-lg shadow-sm border-l-4 
+                        {% if label == 'success' %}bg-green-50 border-green-500 text-green-700
+                        {% else %}bg-blue-50 border-blue-500 text-blue-700{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+            {% block body %}{% endblock %}
+        </div>
+    </main>
+
+</body>
+</html>

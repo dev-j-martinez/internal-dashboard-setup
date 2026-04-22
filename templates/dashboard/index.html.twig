@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard | Intranet{% endblock %}
+{% block header_title %}Company Dashboard{% endblock %}
+
+{% block body %}
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Main Feed -->
+        <div class="lg:col-span-2 space-y-6">
+            <h3 class="text-2xl font-bold text-gray-800 tracking-tight">Latest Announcements</h3>
+            
+            {% for announcement in announcements %}
+                <article class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="h-12 w-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg shadow-sm">
+                            {{ announcement.author.name|slice(0, 1) }}
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold text-gray-900">{{ announcement.title }}</h4>
+                            <p class="text-xs text-gray-500 font-medium">
+                                Posted by {{ announcement.author.name }} on {{ announcement.createdAt|date('F j, Y, g:i a') }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="prose max-w-none text-gray-700 leading-relaxed text-sm">
+                        {{ announcement.content|nl2br }}
+                    </div>
+                </article>
+            {% else %}
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8 text-center text-gray-500">
+                    <svg class="w-12 h-12 mx-auto text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                    <p class="text-lg font-medium">No announcements yet.</p>
+                    <p class="text-sm">Check back later for company news.</p>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Sidebar Widgets -->
+        <div class="space-y-6">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    Upcoming Events
+                </h3>
+                <ul class="space-y-4">
+                    <li class="flex items-start gap-4">
+                        <div class="flex-shrink-0 w-12 text-center">
+                            <span class="block text-xs font-bold text-red-500 uppercase tracking-wide">Oct</span>
+                            <span class="block text-xl font-bold text-gray-900">14</span>
+                        </div>
+                        <div>
+                            <p class="text-sm font-semibold text-gray-800">Company Townhall</p>
+                            <p class="text-xs text-gray-500">10:00 AM - Main Hall</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-4">
+                        <div class="flex-shrink-0 w-12 text-center">
+                            <span class="block text-xs font-bold text-red-500 uppercase tracking-wide">Oct</span>
+                            <span class="block text-xl font-bold text-gray-900">22</span>
+                        </div>
+                        <div>
+                            <p class="text-sm font-semibold text-gray-800">Q3 Release Party</p>
+                            <p class="text-xs text-gray-500">5:00 PM - Rooftop Area</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-xl shadow-sm border border-transparent p-6 text-white relative overflow-hidden">
+                <div class="relative z-10">
+                    <h3 class="text-lg font-bold mb-2">Need Help?</h3>
+                    <p class="text-sm text-blue-100 mb-4">IT Support is available 24/7 to assist with any technical issues.</p>
+                    <button class="bg-white text-blue-700 text-sm font-bold py-2 px-4 rounded shadow hover:bg-gray-50 transition-colors">Submit Ticket</button>
+                </div>
+                <svg class="absolute -bottom-4 -right-4 w-32 h-32 text-white opacity-10" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path></svg>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Employee Directory | Intranet{% endblock %}
+{% block header_title %}Employee Directory{% endblock %}
+
+{% block body %}
+    <div class="mb-8 max-w-2xl">
+        <h3 class="text-2xl font-bold text-gray-800 tracking-tight mb-2">Our Team</h3>
+        <p class="text-gray-500">Find and connect with colleagues across all departments.</p>
+    </div>
+
+    <!-- Search / Filter bar -->
+    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-8 flex items-center justify-between">
+        <div class="relative w-full max-w-md">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+            <input type="text" placeholder="Search employees..." class="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg leading-5 bg-gray-50 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-colors">
+        </div>
+        <div class="hidden md:flex items-center gap-3">
+            <span class="text-sm font-medium text-gray-500">Sort by:</span>
+            <select class="border-gray-200 rounded-lg text-sm bg-gray-50 focus:ring-blue-500 px-3 py-2 border">
+                <option>Name (A-Z)</option>
+                <option>Department</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        {% for user in users %}
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex flex-col items-center text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300 relative group cursor-pointer">
+                
+                <div class="absolute top-4 right-4 text-gray-300 group-hover:text-blue-500 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                </div>
+
+                <div class="h-20 w-20 rounded-full bg-gradient-to-tr {% if loop.index % 3 == 0 %}from-green-400 to-emerald-600{% elseif loop.index % 2 == 0 %}from-pink-500 to-rose-500{% else %}from-blue-500 to-indigo-600{% endif %} flex items-center justify-center text-white font-bold text-3xl shadow-md mb-4 ring-4 ring-white">
+                    {{ user.name|slice(0, 1) }}
+                </div>
+                
+                <h4 class="text-lg font-bold text-gray-900 mb-1">{{ user.name }}</h4>
+                <p class="text-sm font-medium text-blue-600 mb-1">{{ user.jobTitle }}</p>
+                <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-4">{{ user.department ? user.department.name : 'No Department' }}</p>
+                
+                <div class="w-full border-t border-gray-100 pt-4 mt-auto">
+                    <a href="mailto:{{ user.email }}" class="text-sm text-gray-600 hover:text-blue-600 flex items-center justify-center gap-2 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        {{ user.email }}
+                    </a>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-span-full bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center">
+                <p class="text-lg text-gray-500">No employees found.</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
